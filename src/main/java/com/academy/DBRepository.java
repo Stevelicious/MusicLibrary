@@ -13,7 +13,7 @@ import javax.sql.DataSource;
 import static jdk.nashorn.internal.runtime.ScriptingFunctions.EXEC;
 
 /**
- * Created by Emil Båth on 2016-09-28.
+ * Created by Emil Båth on 2016-09-28..
  */
 
 @Component
