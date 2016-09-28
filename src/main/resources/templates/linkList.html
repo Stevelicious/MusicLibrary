@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Name</title>
+</head>
+<body>
+<!--RequestParam: user-->
+<div>Logged in as <span th:text="${user}"/></div>
+
+<div>My list:</div>
+<!--RequestParam: Lista med länkar, skulle senare kunna börja med sida med bara rader av listor-->
+<u1>
+    <li th:each="link:${linkList}">
+        <span th:text="${link.name}"/>
+        <p><span th:text="${link.description}"/></p>
+        <p><a th:href="@{{url}/(url=${link.url}}" th:text="${link.url}"/></p>
+
+    </li>
+</u1>
+</body>
+</html>
