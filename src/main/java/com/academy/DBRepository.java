@@ -93,11 +93,40 @@ public class DBRepository implements Repository {
             ResultSet rs = ps.executeQuery();
             boolean res = false;
             if (rs.next()) {
-                res = rs.getInt(1) == 1;
+                res = true;
             }
             return res;
         } catch (SQLException e) {
             throw new DBRepositoryException("Error in isPasswordValid in DBRepository, could probably not execute query");
+        }
+    }
+
+    @Override
+    public void addUser(String name, String username, String password) {
+        try (Connection conn = dataSource.getConnection();
+        PreparedStatement ps = conn.prepareStatement("EXEC CreateUser ?, ?, ?")) {
+            ps.setString(1,name);
+            ps.setString(2,username);
+            ps.setString(3,password);
+            ps.executeQuery();
+        }catch (SQLException e) {
+            throw new DBRepositoryException("Error in addUser in DBRepository, could probably not execute query");
+        }
+    }
+
+    @Override
+    public boolean validUserName(String username) {
+        try (Connection conn = dataSource.getConnection();
+        PreparedStatement ps = conn.prepareStatement("EXEC validUserName ?")) {
+            ps.setString(1,username);
+            ResultSet rs = ps.executeQuery();
+            boolean res = true;
+            if (rs.next()) {
+                res = false;
+            }
+            return res;
+        } catch (SQLException e) {
+            throw new DBRepositoryException("Error in validUserName in DBRepository, could probably not execute query");
         }
     }
 

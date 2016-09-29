@@ -8,4 +8,6 @@ public interface Repository {
     List<LinkList> getLists(long userID);
     User getUser(String username);
     boolean isPasswordValid(String username, String password);
+    void addUser(String name, String username, String password);
+    boolean validUserName(String username);
 }

@@ -30,6 +30,31 @@ public class WebController {
         return modelAndView;
     }
 
+    @GetMapping("/adduser")
+    public ModelAndView goToAddUserPage(HttpSession httpSession) {
+        ModelAndView modelAndView = new ModelAndView("adduser");
+        String message = (String) httpSession.getAttribute("addUserMessage");
+        modelAndView.addObject("addUserMessage", message);
+        return modelAndView;
+    }
+
+    @PostMapping("/adduser")
+    public String createUser(@RequestParam String name, @RequestParam String username,
+                             @RequestParam String password1,@RequestParam String password2, HttpSession httpSession) {
+        if (!password1.equals(password2)) {
+            httpSession.setAttribute("addUserMessage","Passwords did not match. Try again");
+            return "redirect:./adduser";
+        }
+        if (!dBRepository.validUserName(username)) {
+            httpSession.setAttribute("addUserMessage","Username " + username + " already exists. Try again.");
+            return "redirect:./adduser";
+        }
+        dBRepository.addUser(name,username,password1);
+        User user = dBRepository.getUser(username);
+        httpSession.setAttribute("user",user);
+        return "redirect:./lists";
+    }
+
     @PostMapping("/login")
     public String login(HttpSession httpSession, @RequestParam String username, @RequestParam String password) {
         boolean validLogin = dBRepository.isPasswordValid(username, password);
