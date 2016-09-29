@@ -71,7 +71,7 @@ public class DBRepository implements Repository {
     @Override
     public User getUser(String username) {
         try (Connection conn = dataSource.getConnection();
-             PreparedStatement ps = conn.prepareStatement("EXEC GetUser ?")) {
+             PreparedStatement ps = conn.prepareStatement("SELECT * From [User] WHERE UserName=?")) {
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
             User user = null;
