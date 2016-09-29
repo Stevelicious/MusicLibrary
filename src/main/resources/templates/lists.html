@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Your library</title>
+</head>
+<body>
+<!--RequestParam: user-->
+<div>Logged in as <span th:text="${user.username}"/></div>
+
+<div>My list:</div>
+<!--RequestParam: Lista med linklistor-->
+<u1>
+    <li th:each="list:${lists}">
+        <p><a th:href="'/lists/' + ${list.listID}" th:text="${list.name}"/></p>
+
+    </li>
+</u1>
+</body>
+</html>
