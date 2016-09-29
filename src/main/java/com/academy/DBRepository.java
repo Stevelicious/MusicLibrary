@@ -108,7 +108,7 @@ public class DBRepository implements Repository {
             ps.setString(1,name);
             ps.setString(2,username);
             ps.setString(3,password);
-            ps.executeQuery();
+            ps.executeUpdate();
         }catch (SQLException e) {
             throw new DBRepositoryException("Error in addUser in DBRepository, could probably not execute query");
         }
