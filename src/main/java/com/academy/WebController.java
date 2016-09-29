@@ -32,7 +32,7 @@ public class WebController {
 
     @PostMapping("/login")
     public String login(HttpSession httpSession, @RequestParam String username, @RequestParam String password) {
-        boolean validLogin = true;//dBRepository.isPasswordValid(username, password);
+        boolean validLogin = dBRepository.isPasswordValid(username, password);
         User user = dBRepository.getUser(username);
         httpSession.setAttribute("user", user);
         httpSession.setAttribute("loginAttempt", validLogin ? null : "Login failed. Please try again.");

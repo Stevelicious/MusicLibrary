@@ -71,7 +71,7 @@ public class DBRepository implements Repository {
     @Override
     public User getUser(String username) {
         try (Connection conn = dataSource.getConnection();
-             PreparedStatement ps = conn.prepareStatement("EXEC GetUser ?")) {
+             PreparedStatement ps = conn.prepareStatement("SELECT * FROM [User] WHERE UserName=?")) {
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
             User user = null;
@@ -93,7 +93,7 @@ public class DBRepository implements Repository {
             ResultSet rs = ps.executeQuery();
             boolean res = false;
             if (rs.next()) {
-                res = rs.getInt(1) == 1;
+                res = true;
             }
             return res;
         } catch (SQLException e) {
