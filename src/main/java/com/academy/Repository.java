@@ -7,5 +7,5 @@ public interface Repository {
     List<Link> getLinks(long listID);
     List<LinkList> getLists(long userID);
     User getUser(String username);
-
+    boolean isPasswordValid(String username, String password);
 }
