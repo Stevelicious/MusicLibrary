@@ -23,16 +23,20 @@ public class WebController {
     DBRepository dBRepository;
 
     @RequestMapping(method = RequestMethod.GET, path = "/login")
-    public ModelAndView goToLoginPage() {
-        return new ModelAndView("login");
+    public ModelAndView goToLoginPage(HttpSession httpSession) {
+        ModelAndView modelAndView = new ModelAndView("login");
+        String loginMessage = (String) httpSession.getAttribute("loginAttempt");
+        modelAndView.addObject("loginMessage", loginMessage);
+        return modelAndView;
     }
 
     @PostMapping("/login")
     public String login(HttpSession httpSession, @RequestParam String username, @RequestParam String password) {
-        boolean validLogin = true;
+        boolean validLogin = dBRepository.isPasswordValid(username, password);
         User user = dBRepository.getUser(username);
         httpSession.setAttribute("user", user);
-        return validLogin ? "redirect:./lists" : "redirect:./";
+        httpSession.setAttribute("loginAttempt", validLogin ? null : "Login failed. Please try again.");
+        return validLogin ? "redirect:./lists" : "redirect:./login";
     }
 
     @GetMapping("/lists")
@@ -46,7 +50,7 @@ public class WebController {
     }
 
 
-    @RequestMapping(method = RequestMethod.GET, path = "/list/{listID}")
+    @RequestMapping(method = RequestMethod.GET, path = "/lists/{listID}")
     public ModelAndView viewLinks(HttpSession httpSession, @PathVariable Long listID) {
         List<Link> linkList = dBRepository.getLinks(listID);
         User user = (User) httpSession.getAttribute("user");

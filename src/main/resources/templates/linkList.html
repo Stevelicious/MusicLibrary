@@ -12,10 +12,9 @@
 <!--RequestParam: Lista med länkar, skulle senare kunna börja med sida med bara rader av listor-->
 <u1>
     <li th:each="link:${linkList}">
-        <span th:text="${link.name}"/>
+        <span th:text="${link.linkName}"/>
         <p><span th:text="${link.description}"/></p>
-        <p><a th:href="@{{url}/(url=${link.url}}" th:text="${link.url}"/></p>
-
+        <p><a th:href="'https://www.youtube.com/watch?v=' + ${link.url}" th:text="'https://www.youtube.com/watch?v=' + ${link.url}"/></p>
     </li>
 </u1>
 </body>

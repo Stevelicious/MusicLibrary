@@ -30,22 +30,22 @@ public class DBRepository implements Repository {
              PreparedStatement ps = conn.prepareStatement("EXEC getListOfLinks ?")) {
             ps.setLong(1, listID);
             ResultSet rs = ps.executeQuery();
-            List<Link> linkList = new ArrayList<>();
-            while (rs.next()) {
-                linkList.add(rsLink(rs));
-            }
+            List<Link> linkList = rsLink(rs);
             return linkList;
-
         } catch (SQLException e) {
             throw new DBRepositoryException("Error in getLinks in DBRepository, could probably not execute query");
         }
     }
 
-    private Link rsLink(ResultSet rs) throws SQLException {
-        return new Link(rs.getLong("LinkID"), rs.getString("Url"),
-                rs.getBoolean("IsFavourite"), rs.getLong("ListID"),
-                rs.getString("Name"), rs.getString("Description"),
-                rs.getTimestamp("AddedDate").toLocalDateTime(), rs.getBoolean("isDeleted"));
+    private List<Link> rsLink(ResultSet rs) throws SQLException {
+        List<Link> links = new ArrayList<>();
+        while (rs.next()) {
+            links.add(new Link(rs.getLong("LinkID"), rs.getString("Url"),
+                    rs.getInt("IsFavorite") == 1, rs.getLong("List_ID"),
+                    rs.getString("Name"), rs.getString("Description"),
+                    rs.getTimestamp("AddedDate").toLocalDateTime(), rs.getInt("isDeleted") == 1));
+        }
+        return links;
     }
 
     @Override
@@ -74,13 +74,30 @@ public class DBRepository implements Repository {
              PreparedStatement ps = conn.prepareStatement("SELECT * FROM [User] WHERE UserName=?")) {
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
-            User user = new User("emil", "emil", 2);
+            User user = null;
             while (rs.next()) {
-                user = new User(rs.getString("UserName"),rs.getString("Name"),rs.getLong("UserID"));
+                user = new User(rs.getString("UserName"), rs.getString("Name"), rs.getLong("UserID"));
             }
             return user;
         } catch (SQLException e) {
             throw new DBRepositoryException("Error in getUser in DBRepository, could probably not execute query");
+        }
+    }
+
+    @Override
+    public boolean isPasswordValid(String username, String password) {
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement("EXEC loginAttempt ?, ?")) {
+            ps.setString(1, username);
+            ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
+            boolean res = false;
+            if (rs.next()) {
+                res = true;
+            }
+            return res;
+        } catch (SQLException e) {
+            throw new DBRepositoryException("Error in isPasswordValid in DBRepository, could probably not execute query");
         }
     }
 
