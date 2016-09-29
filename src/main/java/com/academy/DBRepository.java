@@ -100,6 +100,18 @@ public class DBRepository implements Repository {
             throw new DBRepositoryException("Error in isPasswordValid in DBRepository, could probably not execute query");
         }
     }
+    @Override
+    public void createNewList(long userID, String listName, String description) {
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement("EXEC AddList ?, ?, ?")) {
+            ps.setLong(1,userID);
+            ps.setString(2, listName);
+            ps.setString(3, description);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DBRepositoryException("Error in createNewList in DBRepository, could probably not execute query");
+        }
+    }
 
     @Override
     public void addUser(String name, String username, String password) {
@@ -108,7 +120,7 @@ public class DBRepository implements Repository {
             ps.setString(1,name);
             ps.setString(2,username);
             ps.setString(3,password);
-            ps.executeQuery();
+            ps.executeUpdate();
         }catch (SQLException e) {
             throw new DBRepositoryException("Error in addUser in DBRepository, could probably not execute query");
         }

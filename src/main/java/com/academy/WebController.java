@@ -82,6 +82,16 @@ public class WebController {
         String userName = user.getUsername();
         return new ModelAndView("linkList").addObject("linkList", linkList).addObject("user", userName);
     }
+    @RequestMapping(method=RequestMethod.GET, path="/createList")
+    public ModelAndView viewCreateList(HttpSession httpSession){
+        return new ModelAndView("newList").addObject("user", httpSession.getAttribute("user"));
+    }
+    @RequestMapping(method=RequestMethod.POST, path="/createList")
+    public String createList(HttpSession httpSession, @RequestParam String listName, @RequestParam String description){
+        User user= (User) httpSession.getAttribute("user");
+        dBRepository.createNewList(user.getUserID(), listName, description);
+        return "redirect:./lists";
+    }
 
 
     @RequestMapping(value = "/dbtest", produces = "text/plain")
