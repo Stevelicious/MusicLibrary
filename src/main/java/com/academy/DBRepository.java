@@ -113,6 +113,35 @@ public class DBRepository implements Repository {
         }
     }
 
+    @Override
+    public void addUser(String name, String username, String password) {
+        try (Connection conn = dataSource.getConnection();
+        PreparedStatement ps = conn.prepareStatement("EXEC CreateUser ?, ?, ?")) {
+            ps.setString(1,name);
+            ps.setString(2,username);
+            ps.setString(3,password);
+            ps.executeUpdate();
+        }catch (SQLException e) {
+            throw new DBRepositoryException("Error in addUser in DBRepository, could probably not execute query");
+        }
+    }
+
+    @Override
+    public boolean validUserName(String username) {
+        try (Connection conn = dataSource.getConnection();
+        PreparedStatement ps = conn.prepareStatement("EXEC validUserName ?")) {
+            ps.setString(1,username);
+            ResultSet rs = ps.executeQuery();
+            boolean res = true;
+            if (rs.next()) {
+                res = false;
+            }
+            return res;
+        } catch (SQLException e) {
+            throw new DBRepositoryException("Error in validUserName in DBRepository, could probably not execute query");
+        }
+    }
+
     public int db() throws SQLException {
         try (Connection conn = dataSource.getConnection();
              Statement st = conn.createStatement();

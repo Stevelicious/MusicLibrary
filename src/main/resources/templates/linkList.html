@@ -15,6 +15,7 @@
         <span th:text="${link.linkName}"/>
         <p><span th:text="${link.description}"/></p>
         <p><a th:href="'https://www.youtube.com/watch?v=' + ${link.url}" th:text="'https://www.youtube.com/watch?v=' + ${link.url}"/></p>
+        <iframe width="640" height="360" th:src="'https://www.youtube.com/embed/' + ${link.url}"></iframe>
     </li>
 </u1>
 </body>

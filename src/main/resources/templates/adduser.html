@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Register new user</title>
+</head>
+<body>
+
+
+<h1>Register new user</h1>
+<form action="adduser" method="POST">
+    <div><input placeholder="Enter your name" name="name"/></div>
+    <div><input placeholder="Enter username" name="username"/></div>
+    <div><input placeholder="Enter password" name="password1"/></div>
+    <div><input placeholder="Enter password again" name="password2"/></div>
+    <div><input type="submit" value="Create user"/></div>
+</form>
+<div th:text="${addUserMessage}"></div>
+</body>
+</html>
