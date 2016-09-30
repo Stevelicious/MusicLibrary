@@ -10,6 +10,9 @@
 <div><a href="../lists">Back</a></div>
 
 <div>My list:</div>
+<form method="POST">
+    <input type="submit" th:value="'make ' + ${list.publicOrPrivate()}"/>
+</form>
 <!--RequestParam: Lista med länkar, skulle senare kunna börja med sida med bara rader av listor-->
 <ul>
     <li th:each="link:${linkList}">

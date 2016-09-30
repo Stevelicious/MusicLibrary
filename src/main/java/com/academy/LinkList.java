@@ -24,4 +24,8 @@ public class LinkList {
     public boolean getIsPublic() {
         return isPublic;
     }
+
+    public String publicOrPrivate() {
+        return this.isPublic? "private" : "public";
+    }
 }
