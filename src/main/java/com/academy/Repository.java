@@ -12,4 +12,7 @@ public interface Repository {
     boolean validUserName(String username);
     void createNewList(long userID, String listName, String description);
     List<User> getUsers(String searchString);
+    void changePublicOrPrivate(Long listID);
+
+    LinkList getList(Long listID);
 }
