@@ -8,7 +8,7 @@
 <!--RequestParam: user-->
 <div>Logged in as <span th:text="${user.username}"/></div>
 <div>
-    <form action="search" method="POST">
+    <form action="../search" method="POST">
         <input placeholder="Search for user" name="username"/>
         <input type="submit" value="Search"/>
     </form>
@@ -21,6 +21,6 @@
         <p><a th:href="'/lists/' + ${list.listID}" th:text="${list.name}"/></p>
     </li>
 </ul>
-<div> <a href="./createList"> Create new list</a></div>
+<div> <a href="/createList"> Create new list</a></div>
 </body>
 </html>

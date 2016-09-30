@@ -6,6 +6,7 @@
 </head>
 <body>
 <div>Logged in as <span th:text="${loggedInUser.username}"/></div>
+<div><a th:href="'../' + ${listUser.username}">Back</a></div>
 
 <h1 th:text="${listUser.username} + 's links'"></h1>
 <ul>
