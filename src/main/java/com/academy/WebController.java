@@ -1,6 +1,7 @@
 package com.academy;
 
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -15,6 +16,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -71,6 +73,7 @@ public class WebController {
         modelAndView.addObject("user", user);
         List<LinkList> lists = dBRepository.getLists(user.getUserID());
         modelAndView.addObject("lists", lists);
+        modelAndView.addObject("searchMessage",httpSession.getAttribute("searchMessage"));
         return modelAndView;
     }
 
@@ -102,6 +105,57 @@ public String addLink( HttpSession httpSession, @RequestParam String url, @Reque
     String returnAdr="redirect:./lists/"+listID;
     return returnAdr;
 }
+    @PostMapping("/search")
+    public String searchForUser(@RequestParam String username, HttpSession httpSession) {
+        List<User> users = dBRepository.getUsers(username);
+        String searchMessage = "";
+        if (users.size() == 0) {
+            searchMessage = "There is no user with username " + username + ".";
+            httpSession.setAttribute("searchMessage",searchMessage);
+            return "redirect:./lists";
+        }
+        httpSession.setAttribute("users",users);
+        return "redirect:./searchresult";
+    }
+
+    @GetMapping("/searchresult")
+    public ModelAndView viewSearchResult(HttpSession httpSession) {
+        List<User> userList = (List<User>) httpSession.getAttribute("users");
+        ModelAndView modelAndView = new ModelAndView("listOfUsers");
+        modelAndView.addObject("userList",userList);
+        User user = (User) httpSession.getAttribute("user");
+        modelAndView.addObject("user",user);
+        return modelAndView;
+    }
+
+    @GetMapping("users/{username}")
+    public ModelAndView viewUserLists(@PathVariable String username, HttpSession httpSession) {
+        ModelAndView modelAndView = new ModelAndView("userPublicLists");
+        User listUser = dBRepository.getUser(username);
+        List<LinkList> lists = dBRepository.getLists(listUser.getUserID());
+        List<LinkList> publicLists = new ArrayList<>();
+        for (LinkList list : lists) {
+            if (list.getIsPublic()) publicLists.add(list);
+        }
+        modelAndView.addObject("linkLists",publicLists);
+        User user = (User) httpSession.getAttribute("user");
+        modelAndView.addObject("user", user);
+        modelAndView.addObject("listUser", listUser);
+        return modelAndView;
+    }
+
+    @GetMapping("/users/{username}/{listID}")
+    public ModelAndView viewPublicListLinks(@PathVariable long listID,@PathVariable String username,
+                                            HttpSession httpSession) {
+        List<Link> links = dBRepository.getLinks(listID);
+        ModelAndView modelAndView = new ModelAndView("publicLinkList");
+        modelAndView.addObject("links",links);
+        User loggedInUser = (User) httpSession.getAttribute("user");
+        User listUser = dBRepository.getUser(username);
+        modelAndView.addObject("loggedInUser",loggedInUser);
+        modelAndView.addObject("listUser",listUser);
+        return modelAndView;
+    }
 
     @RequestMapping(value = "/dbtest", produces = "text/plain")
     @ResponseBody

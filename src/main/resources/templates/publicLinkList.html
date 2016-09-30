@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title th:text="${listUser.username} + 's links'"></title>
+</head>
+<body>
+<div>Logged in as <span th:text="${loggedInUser.username}"/></div>
+
+<h1 th:text="${listUser.username} + 's links'"></h1>
+<ul>
+    <li th:each="link:${links}">
+        <span th:text="${link.linkName}"/>
+        <p><span th:text="${link.description}"/></p>
+        <iframe width="640" height="360" th:src="'https://www.youtube.com/embed/' + ${link.url}"></iframe>
+    </li>
+</ul>
+</body>
+</html>

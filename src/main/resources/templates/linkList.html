@@ -10,13 +10,13 @@
 
 <div>My list:</div>
 <!--RequestParam: Lista med länkar, skulle senare kunna börja med sida med bara rader av listor-->
-<u1>
+<ul>
     <li th:each="link:${linkList}">
         <span th:text="${link.linkName}"/>
         <p><span th:text="${link.description}"/></p>
         <iframe width="640" height="360" th:src="'https://www.youtube.com/embed/' + ${link.url}"></iframe>
     </li>
-</u1>
+</ul>
 <div>
     <h5> Add new link: </h5>
     <div> Fill in the details below and click "Add Link"</div>
@@ -29,6 +29,5 @@
         <div> <input type="submit" value="Add link"/></div>
     </form>
 </div>
-
 </body>
 </html>

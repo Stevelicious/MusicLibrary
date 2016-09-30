@@ -65,13 +65,13 @@ public class DBRepository implements Repository {
     }
 
     private LinkList rsLinkList(ResultSet rs) throws SQLException {
-        return new LinkList(rs.getLong("listID"), rs.getString("name"));
+        return new LinkList(rs.getLong("listID"), rs.getString("name"), rs.getBoolean("isPublic"));
     }
 
     @Override
     public User getUser(String username) {
         try (Connection conn = dataSource.getConnection();
-             PreparedStatement ps = conn.prepareStatement("SELECT * From [User] WHERE UserName=?")) {
+             PreparedStatement ps = conn.prepareStatement("EXEC getUser ?")) {
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
             User user = null;
@@ -110,6 +110,24 @@ public class DBRepository implements Repository {
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DBRepositoryException("Error in createNewList in DBRepository, could probably not execute query");
+        }
+    }
+
+    @Override
+    public List<User> getUsers(String searchString) {
+        try (Connection conn = dataSource.getConnection();
+        PreparedStatement ps = conn.prepareStatement("EXEC getUsers ?")) {
+            ps.setString(1,searchString);
+            ResultSet rs = ps.executeQuery();
+            List<User> users = new ArrayList<>();
+            while (rs.next()) {
+                String username = rs.getString("UserName");
+                User user = getUser(username);
+                users.add(user);
+            }
+            return users;
+        } catch (SQLException e) {
+            throw new DBRepositoryException("Error in getUsers in DBRepository, could probably not execute query");
         }
     }
 
