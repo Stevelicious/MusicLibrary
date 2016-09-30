@@ -18,5 +18,18 @@
         <iframe width="640" height="360" th:src="'https://www.youtube.com/embed/' + ${link.url}"></iframe>
     </li>
 </u1>
+<div>
+    <h5> Add new link: </h5>
+    <div> Fill in the details below and click "Add Link"</div>
+    <form action="/addLink" method="POST">
+        <div> <input placeholder="YouTubeUrl" name="url"/> </div>
+        <div> <input placeholder="Name" name="linkName"/> </div>
+        <div> <input placeholder="Description" name="description"/> </div>
+       <div> <input type="checkbox" name="favorite" value="true"/>Make favorite </div>
+        <input type="hidden" name="favorite" value="false"/>
+        <div> <input type="submit" value="Add link"/></div>
+    </form>
+</div>
+
 </body>
 </html>
