@@ -1,0 +1,14 @@
+.home {
+	text-align: center;
+}
+
+.home input {
+    width: 500px;
+    height: 75px;
+    margin: 10px;
+    font-size: 40px;
+}
+
+.small-logo{
+    height: 100px;
+}
