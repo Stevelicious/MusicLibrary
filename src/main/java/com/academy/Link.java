@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public class Link {
     public long linkID;
     public String url;
-    public boolean favourite;
+    public boolean favourite=false;
     public long listID;
     public String linkName;
     public String description;
@@ -26,4 +26,13 @@ public class Link {
         this.addDate = addDate;
         this.isDeleted = isDeleted;
     }
+
+    public Link(String url, boolean favourite, long listID, String linkName, String description) {
+        this.url = url;
+        this.favourite = favourite;
+        this.listID = listID;
+        this.linkName = linkName;
+        this.description = description;
+    }
 }
+

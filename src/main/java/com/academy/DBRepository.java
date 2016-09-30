@@ -159,6 +159,23 @@ public class DBRepository implements Repository {
             throw new DBRepositoryException("Error in validUserName in DBRepository, could probably not execute query");
         }
     }
+    public void addLink(Link link) {
+        try(Connection conn=dataSource.getConnection();
+        PreparedStatement ps = conn.prepareStatement("EXEC AddLink ?, ?, ?, ?, ?")) {
+            int favorite = link.favourite ? 1 : 0;
+            String[] partUrl=link.url.split("=");
+            String url=partUrl[1]; //för att få slutet på url (unikt för varje video)
+
+            ps.setLong(1, link.listID);
+            ps.setString(2, url);
+            ps.setString(3, link.linkName);
+            ps.setString(4, link.description);
+            ps.setInt(5, favorite);
+            ps.executeUpdate();
+        }catch(SQLException e){
+            throw new DBRepositoryException("Error in addLink in DBRepository, could probably not execute query");
+        }
+    }
 
     public int db() throws SQLException {
         try (Connection conn = dataSource.getConnection();
@@ -169,4 +186,6 @@ public class DBRepository implements Repository {
             return two;
         }
     }
+
+
 }

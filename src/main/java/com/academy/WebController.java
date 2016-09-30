@@ -81,6 +81,7 @@ public class WebController {
     @RequestMapping(method = RequestMethod.GET, path = "/lists/{listID}")
     public ModelAndView viewLinks(HttpSession httpSession, @PathVariable Long listID) {
         List<Link> linkList = dBRepository.getLinks(listID);
+        httpSession.setAttribute("listID", listID);
         User user = (User) httpSession.getAttribute("user");
         String userName = user.getUsername();
         return new ModelAndView("linkList").addObject("linkList", linkList).addObject("user", userName);
@@ -96,6 +97,14 @@ public class WebController {
         return "redirect:./lists";
     }
 
+@RequestMapping(method=RequestMethod.POST, path="/addLink")
+public String addLink( HttpSession httpSession, @RequestParam String url, @RequestParam String linkName, @RequestParam String description, @RequestParam boolean favorite){
+   Long listID=(Long) httpSession.getAttribute("listID");
+    Link link=new Link(url, favorite, listID, linkName,description);
+    dBRepository.addLink(link);
+    String returnAdr="redirect:./lists/"+listID;
+    return returnAdr;
+}
     @PostMapping("/search")
     public String searchForUser(@RequestParam String username, HttpSession httpSession) {
         List<User> users = dBRepository.getUsers(username);
