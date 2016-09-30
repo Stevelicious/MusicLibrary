@@ -82,9 +82,20 @@ public class WebController {
     public ModelAndView viewLinks(HttpSession httpSession, @PathVariable Long listID) {
         List<Link> linkList = dBRepository.getLinks(listID);
         httpSession.setAttribute("listID", listID);
+        LinkList list = dBRepository.getList(listID);
         User user = (User) httpSession.getAttribute("user");
         String userName = user.getUsername();
-        return new ModelAndView("linkList").addObject("linkList", linkList).addObject("user", userName);
+        ModelAndView modelAndView = new ModelAndView("linkList");
+        modelAndView.addObject("linkList", linkList);
+        modelAndView.addObject("user", userName);
+        modelAndView.addObject("list",list);
+        return modelAndView;
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path = "/lists/{listID}")
+    public String changePublicStatus(HttpSession httpSession, @PathVariable Long listID) {
+        dBRepository.changePublicOrPrivate(listID);
+        return "redirect:../lists/"+listID;
     }
     @RequestMapping(method=RequestMethod.GET, path="/createList")
     public ModelAndView viewCreateList(HttpSession httpSession){
@@ -156,6 +167,8 @@ public String addLink( HttpSession httpSession, @RequestParam String url, @Reque
         modelAndView.addObject("listUser",listUser);
         return modelAndView;
     }
+
+
 
     @RequestMapping(value = "/dbtest", produces = "text/plain")
     @ResponseBody

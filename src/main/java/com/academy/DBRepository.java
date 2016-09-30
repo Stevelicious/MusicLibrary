@@ -132,6 +132,33 @@ public class DBRepository implements Repository {
     }
 
     @Override
+    public void changePublicOrPrivate(Long listID) {
+        try (Connection conn = dataSource.getConnection();
+        PreparedStatement ps = conn.prepareStatement("EXEC togglePublicStatus ?")) {
+            ps.setLong(1,listID);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+           throw new DBRepositoryException("Error in changePubliOrPrivate in DBRepository, could probably not execute query");
+        }
+    }
+
+    @Override
+    public LinkList getList(Long listID) {
+        try (Connection conn = dataSource.getConnection();
+        PreparedStatement ps = conn.prepareStatement("EXEC getListInfo ?")) {
+            ps.setLong(1,listID);
+            ResultSet rs = ps.executeQuery();
+            LinkList list = null;
+            while (rs.next()) {
+                list = new LinkList(listID,rs.getString("name"),rs.getBoolean("isPublic"));
+            }
+            return list;
+        } catch (SQLException e) {
+            throw new DBRepositoryException("Error in getList in DBRepository, could probably not execute query");
+        }
+    }
+
+    @Override
     public void addUser(String name, String username, String password) {
         try (Connection conn = dataSource.getConnection();
         PreparedStatement ps = conn.prepareStatement("EXEC CreateUser ?, ?, ?")) {
