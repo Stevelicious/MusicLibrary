@@ -5,10 +5,11 @@
     <title>Create new list </title>
 </head>
 <body>
+<div>Logged in as <span th:text="${user.username}"/></div>
+<div><a href="/lists">Back</a></div>
 <h1>
     Create new list
 </h1>
-<div>Logged in as <span th:text="${user.username}"/></div>
 
 <form action="/createList" method="POST">
     <div>Enter a name for your new list: <input placeholder="Name..." name="listName" /></div>
