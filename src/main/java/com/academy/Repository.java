@@ -11,4 +11,5 @@ public interface Repository {
     void addUser(String name, String username, String password);
     boolean validUserName(String username);
     void createNewList(long userID, String listName, String description);
+    List<User> getUsers(String searchString);
 }

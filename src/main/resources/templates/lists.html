@@ -7,14 +7,20 @@
 <body>
 <!--RequestParam: user-->
 <div>Logged in as <span th:text="${user.username}"/></div>
-
+<div>
+    <form action="search" method="POST">
+        <input placeholder="Search for user" name="username"/>
+        <input type="submit" value="Search"/>
+    </form>
+</div>
+<div th:text="${searchMessage}"></div>
 <div>My list:</div>
 <!--RequestParam: Lista med linklistor-->
-<u1>
+<ul>
     <li th:each="list:${lists}">
         <p><a th:href="'/lists/' + ${list.listID}" th:text="${list.name}"/></p>
     </li>
-</u1>
+</ul>
 <div> <a href="./createList"> Create new list</a></div>
 </body>
 </html>
